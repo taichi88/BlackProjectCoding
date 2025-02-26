@@ -1,4 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using System.IO;
+using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Black.Infrastructure.Data
 {
@@ -15,31 +17,28 @@ namespace Black.Infrastructure.Data
         // Method to execute the SQL script for creating the table
         public void ExecuteScript()
         {
-            var script = @"
-        IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'People')
-        BEGIN
-            CREATE TABLE People (
-                ID INT IDENTITY(1,1) PRIMARY KEY,
-                Name NVARCHAR(100) NOT NULL,
-                Surname NVARCHAR(100) NOT NULL
-            );
-        END
+            // Get the path to the SQL script file
+            string personScriptPath = @"C:\Users\user\Desktop\Csharp\BlackWorkFolder\Blackcoding\Black.Infrastructure\Data\Scripts\CreatePersonTable.sql";
+            string cardScriptPath = @"C:\Users\user\Desktop\Csharp\BlackWorkFolder\Blackcoding\Black.Infrastructure\Data\Scripts\CreateCardTable.sql";
 
-        IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Cards')
-        BEGIN
-             CREATE TABLE Cards (
-                CardID INT IDENTITY(1,1) PRIMARY KEY,
-                CardNumber NVARCHAR(100) NOT NULL,
-                ExpiryDate DATE NOT NULL
-             );
-        END";
+            // Read the script file content
+            var personScript = File.ReadAllText(personScriptPath);
+            var cardScript = File.ReadAllText(cardScriptPath);
+            // Execute the Person table creation script
+            ExecuteSql(personScript);
 
+            // Execute the Cards table creation script
+            ExecuteSql(cardScript);
+        }
+        private void ExecuteSql(string script)
+        {
             using (var connection = _databaseConnection.GetConnection())  // Using the DatabaseConnection class
             {
                 connection.Open();
                 var command = new SqlCommand(script, connection);
-                command.ExecuteNonQuery();  // Execute the SQL command to create the table
+                command.ExecuteNonQuery();  // Execute the SQL command to create the tables
             }
         }
     }
 }
+
