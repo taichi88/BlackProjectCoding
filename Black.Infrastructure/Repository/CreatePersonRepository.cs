@@ -27,7 +27,7 @@ namespace Black.Infrastructure.Repositories
 
         public async Task<int> CreatePersonAsync(Person person)
         {
-            var sql = "INSERT INTO Person1 (name) VALUES (@Name)";
+            var sql = "INSERT INTO Person (Name) VALUES (@Name)";
 
             // Ensure Dapper's ExecuteAsync method is being used
             var result = await _dapperHelper.ExecuteAsync(sql, new { Name = person.Name});

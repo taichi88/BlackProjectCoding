@@ -1,8 +1,8 @@
 ﻿
 
-CREATE TABLE People (
+CREATE TABLE Person (
     ID INT IDENTITY(1,1) PRIMARY KEY, 
     Name NVARCHAR(100) NOT NULL,
-    Surname NVARCHAR(100) NOT NULL
+    
 );
 
