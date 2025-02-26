@@ -23,6 +23,15 @@ namespace Black.Infrastructure.Data
                 Name NVARCHAR(100) NOT NULL,
                 Surname NVARCHAR(100) NOT NULL
             );
+        END
+
+        IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Cards')
+        BEGIN
+             CREATE TABLE Cards (
+                CardID INT IDENTITY(1,1) PRIMARY KEY,
+                CardNumber NVARCHAR(100) NOT NULL,
+                ExpiryDate DATE NOT NULL
+             );
         END";
 
             using (var connection = _databaseConnection.GetConnection())  // Using the DatabaseConnection class

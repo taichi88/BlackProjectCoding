@@ -1,0 +1,6 @@
+﻿CREATE TABLE Cards (
+    ID INT IDENTITY(1,1) PRIMARY KEY, 
+    CardNumber NVARCHAR(100) NOT NULL,
+    Expiration NVARCHAR(100) NOT NULL,
+    PinCode NVARCHAR(100) NOT NULL
+);
