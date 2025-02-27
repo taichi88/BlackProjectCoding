@@ -17,28 +17,34 @@ namespace Black.Infrastructure.Data
         // Method to execute the SQL script for creating the table
         public void ExecuteScript()
         {
-            // Get the path to the SQL script file
-            string personScriptPath = @"C:\Users\user\Desktop\Csharp\BlackWorkFolder\Blackcoding\Black.Infrastructure\Data\Scripts\CreatePersonTable.sql";
-            string cardScriptPath = @"C:\Users\user\Desktop\Csharp\BlackWorkFolder\Blackcoding\Black.Infrastructure\Data\Scripts\CreateCardTable.sql";
-
-            // Read the script file content
-            var personScript = File.ReadAllText(personScriptPath);
-            var cardScript = File.ReadAllText(cardScriptPath);
-            // Execute the Person table creation script
-            ExecuteSql(personScript);
-
-            // Execute the Cards table creation script
-            ExecuteSql(cardScript);
-        }
-        private void ExecuteSql(string script)
-        {
-            using (var connection = _databaseConnection.GetConnection())  // Using the DatabaseConnection class
+            // Step 1: Create the database if it doesn't exist
+            using (var connection = _databaseConnection.GetConnection())
             {
                 connection.Open();
-                var command = new SqlCommand(script, connection);
-                command.ExecuteNonQuery();  // Execute the SQL command to create the tables
+                var createDbCommand = new SqlCommand("IF DB_ID('BlackCodePersonDB2') IS NULL CREATE DATABASE BlackCodePersonDB2;", connection);
+                createDbCommand.ExecuteNonQuery();
+            }
+
+            // Step 2: Switch to the new database and execute the table creation scripts
+            using (var connection = _databaseConnection.GetConnection())
+            {
+                connection.Open();
+                connection.ChangeDatabase("BlackCodePersonDB2");  // Switch to the new database
+                
+                // Step 3: Read and execute the table creation scripts
+                var personScript = File.ReadAllText(@"C:\Users\user\Desktop\Csharp\BlackWorkFolder\Blackcoding\Black.Infrastructure\Data\Scripts\CreatePersonTable.sql");
+                var cardScript = File.ReadAllText(@"C:\Users\user\Desktop\Csharp\BlackWorkFolder\Blackcoding\Black.Infrastructure\Data\Scripts\CreateCardTable.sql");
+
+                ExecuteSql(personScript, connection);
+                ExecuteSql(cardScript, connection);
             }
         }
+        private void ExecuteSql(string script, SqlConnection connection)
+        {
+            var command = new SqlCommand(script, connection);
+            command.ExecuteNonQuery();  // Execute the SQL command to create the tables
+        }
     }
+    
 }
 
