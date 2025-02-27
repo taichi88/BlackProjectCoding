@@ -7,7 +7,7 @@ using Black.Domain.Entities;
 
 namespace Black.Domain.RepositoryContracts
 {
-    // In Black.Domain.RepositoryContracts
+    // In Black.Domain.RepositoryContractsd
     public interface ICreatePersonRepository
     {
         Task<int> CreatePersonAsync(Person person); // Ensure the signature is here
