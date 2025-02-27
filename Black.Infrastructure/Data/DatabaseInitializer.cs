@@ -33,10 +33,14 @@ namespace Black.Infrastructure.Data
                 
                 // Step 3: Read and execute the table creation scripts
                 var personScript = File.ReadAllText(@"C:\Users\user\Desktop\Csharp\BlackWorkFolder\Blackcoding\Black.Infrastructure\Data\Scripts\CreatePersonTable.sql");
+                var accountScript = File.ReadAllText(@"C:\Users\user\Desktop\Csharp\BlackWorkFolder\Blackcoding\Black.Infrastructure\Data\Scripts\CreateAccountTable.sql");
                 var cardScript = File.ReadAllText(@"C:\Users\user\Desktop\Csharp\BlackWorkFolder\Blackcoding\Black.Infrastructure\Data\Scripts\CreateCardTable.sql");
+                
 
                 ExecuteSql(personScript, connection);
+                ExecuteSql(accountScript, connection);
                 ExecuteSql(cardScript, connection);
+                
             }
         }
         private void ExecuteSql(string script, SqlConnection connection)

@@ -10,10 +10,11 @@ namespace Black.Domain.Entities
 {
     public class Person
     {
-        
-        //public int Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
-      
 
+        // Navigation property for related Cards (One-to-Many relationship)
+        public List<Accounts> Accounts { get; set; }
     }
+
 }
